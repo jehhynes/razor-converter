@@ -24,9 +24,9 @@
         {
             var srcNode = node as IWebFormsExpressionBlockNode;
             var isMultiline = srcNode.Expression.Contains("\r") || srcNode.Expression.Contains("\n");
-            bool isTernaryExpression = ternaryRegex.IsMatch(srcNode.Expression);
+            bool needsParens = ternaryRegex.IsMatch(srcNode.Expression) || HasUnbalancedParens(srcNode.Expression);
             var expression = srcNode.Expression.Trim(new char[] { ' ', '\t' });
-            if (isTernaryExpression)
+            if (needsParens)
                 expression = "(" + expression + ")";
 
             expression = expression.Replace("ResolveUrl", "Url.Content");
@@ -60,6 +60,30 @@
             {
                 return string.Format("Html.Raw(HttpUtility.HtmlDecode({0}))", m.Groups["statement"].Value.Trim());
             });
+        }
+
+
+        static Regex parensRegex = new Regex(@"(\(|\))", RegexOptions.Singleline | RegexOptions.Multiline | RegexOptions.Compiled);
+
+        private bool HasUnbalancedParens(string expression)
+        {
+            bool isFirst = true;
+            int level = 0;
+            foreach (Match match in parensRegex.Matches(expression))
+            {
+                if (!isFirst && level == 0)
+                    return true;
+
+                char paren = match.Groups[1].Value[0];
+                if (paren == '(')
+                    level++;
+                else if (paren == ')')
+                    level--;
+
+                isFirst = false;
+            }
+
+            return false;
         }
     }
 }

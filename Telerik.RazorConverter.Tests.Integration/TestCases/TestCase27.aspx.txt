@@ -1,5 +1,11 @@
 ﻿<%@ Page Title="Select a Document" MasterPageFile="~/Views/Admin/AffiliateSettings/CustomContent/Popup.Master" Language="C#" Inherits="Drg.M3.Client.M3ViewPage" %>
 
+<script type="text/javascript">
+            <% if ((ViewData["label"] as Drg.M3.Domain.Label) != null) { %>
+            expandTo: "/0/<%:(ViewData["label"] as Drg.M3.Domain.Label).KeyChain.Replace(".", "/")%>/",
+            <% } %>
+</script>
+
 <option value="<%:ug.Id %>" <%:Model!=null && Model.UserGroups.Contains(ug) ? "selected" : "" %>><%:ug.Name%></option>
 
 <script runat="server">

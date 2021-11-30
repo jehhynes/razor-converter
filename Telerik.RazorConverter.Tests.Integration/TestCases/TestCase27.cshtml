@@ -1,13 +1,25 @@
 ﻿@inherits Drg.M3.Client.M3ViewPage
 
+    @using (Html.BeginFormCurrentAction(new { id = "frmEdit", Class="large"})) {
+        <div>some text here but don't wrap it</div>
+    }
+
+@section Scripts {
 <script type="text/javascript">
-            @if ((ViewData["label"] as Drg.M3.Domain.Label) != null) { 
+    $(function() {
+        $("#foldertree").foldertree({
+            loadUrl: "@Url.Content("~/Document/GetLabels/")",
+            @if ((ViewData["label"] as Drg.M3.Domain.Label) != null) { <text>
             expandTo: "/0/@((ViewData["label"] as Drg.M3.Domain.Label).KeyChain.Replace(".", "/"))/",
-             } 
+                </text> }
+            navigateUrl: "@Url.Content("~/Document/Label/{id}?popup=true")"
+        });
+    });
 </script>
+}
 
-<option value="@ug.Id" @(Model!=null && Model.UserGroups.Contains(ug) ? "selected" : "")>@ug.Name</option>
+    <option value="@ug.Id" @(Model != null && Model.UserGroups.Contains(ug) ? "selected" : "")>@ug.Name</option>
 
-        public void Page_Load()
-        {
-        }
+    public void Page_Load()
+    {
+    }

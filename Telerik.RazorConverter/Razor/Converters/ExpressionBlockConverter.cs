@@ -18,11 +18,17 @@
             ExpressionNodeFactory = nodeFactory;
         }
 
+        static Regex ternaryRegex = new Regex(@"^.+?\?.+?:.+?$", RegexOptions.Singleline | RegexOptions.Multiline | RegexOptions.Compiled);
+
         public IList<IRazorNode> ConvertNode(IWebFormsNode node)
         {
             var srcNode = node as IWebFormsExpressionBlockNode;
             var isMultiline = srcNode.Expression.Contains("\r") || srcNode.Expression.Contains("\n");
+            bool isTernaryExpression = ternaryRegex.IsMatch(srcNode.Expression);
             var expression = srcNode.Expression.Trim(new char[] { ' ', '\t' });
+            if (isTernaryExpression)
+                expression = "(" + expression + ")";
+
             expression = expression.Replace("ResolveUrl", "Url.Content");
             expression = RemoveHtmlEncode(expression);
             expression = WrapHtmlDecode(expression);

@@ -1,5 +1,7 @@
 ﻿<%@ Page Title="Select a Document" MasterPageFile="~/Views/Admin/AffiliateSettings/CustomContent/Popup.Master" Language="C#" Inherits="Drg.M3.Client.M3ViewPage" %>
 
+<option value="<%:ug.Id %>" <%:Model!=null && Model.UserGroups.Contains(ug) ? "selected" : "" %>><%:ug.Name%></option>
+
 <script runat="server">
     public void Page_Load()
     {

@@ -1,5 +1,7 @@
 ﻿@inherits Drg.M3.Client.M3ViewPage
 
+<option value="@ug.Id" @(Model!=null && Model.UserGroups.Contains(ug) ? "selected" : "")>@ug.Name</option>
+
         public void Page_Load()
         {
         }

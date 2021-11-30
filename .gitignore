@@ -5,3 +5,5 @@ obj/
 _ReSharper/
 _ReSharper*/
 *.user
+/.vs/Telerik.RazorConverter
+/packages/xunit.runner.visualstudio.2.4.3

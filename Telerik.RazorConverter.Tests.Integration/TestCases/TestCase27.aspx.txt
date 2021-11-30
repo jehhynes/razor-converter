@@ -1,0 +1,7 @@
+﻿<%@ Page Title="Select a Document" MasterPageFile="~/Views/Admin/AffiliateSettings/CustomContent/Popup.Master" Language="C#" Inherits="Drg.M3.Client.M3ViewPage" %>
+
+<script runat="server">
+    public void Page_Load()
+    {
+    }
+</script>

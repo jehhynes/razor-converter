@@ -1,5 +1,7 @@
 ﻿<%@ Page Title="Select a Document" MasterPageFile="~/Views/Admin/AffiliateSettings/CustomContent/Popup.Master" Language="C#" Inherits="Drg.M3.Client.M3ViewPage" %>
 
+<%:(int)Model.ReferenceType%>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <% using (Html.BeginFormCurrentAction(new { id = "frmEdit", Class="large"})) { %>
         <div>some text here but don't wrap it</div>

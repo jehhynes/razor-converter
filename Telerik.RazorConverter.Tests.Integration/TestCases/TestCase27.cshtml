@@ -1,13 +1,17 @@
 ﻿@inherits Drg.M3.Client.M3ViewPage
 
+@Url.Content("~/Document?popup=true")
+
+@("asdf" + "asdf2")
+
 @((int)Model.ReferenceType)
 
-    @using (Html.BeginFormCurrentAction(new { id = "frmEdit", Class="large"})) {
-        <div>some text here but don't wrap it</div>
-    }
+@using (Html.BeginFormCurrentAction(new { id = "frmEdit", Class="large"})) {
+    <div>some text here but don't wrap it</div>
+}
 
 @section Scripts {
-<script type="text/javascript">
+    <script type="text/javascript">
     $(function() {
         $("#foldertree").foldertree({
             loadUrl: "@Url.Content("~/Document/GetLabels/")",
@@ -17,10 +21,10 @@
             navigateUrl: "@Url.Content("~/Document/Label/{id}?popup=true")"
         });
     });
-</script>
+    </script>
 }
 
-    <option value="@ug.Id" @(Model != null && Model.UserGroups.Contains(ug) ? "selected" : "")>@ug.Name</option>
+<option value="@ug.Id" @(Model != null && Model.UserGroups.Contains(ug) ? "selected" : "")>@ug.Name</option>
 
     public void Page_Load()
     {

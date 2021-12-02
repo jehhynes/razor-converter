@@ -18,13 +18,11 @@
             ExpressionNodeFactory = nodeFactory;
         }
 
-        static Regex ternaryRegex = new Regex(@"^.+?\?.+?:.+?$", RegexOptions.Singleline | RegexOptions.Multiline | RegexOptions.Compiled);
-
         public IList<IRazorNode> ConvertNode(IWebFormsNode node)
         {
             var srcNode = node as IWebFormsExpressionBlockNode;
             var isMultiline = srcNode.Expression.Contains("\r") || srcNode.Expression.Contains("\n");
-            bool needsParens = ternaryRegex.IsMatch(srcNode.Expression) || HasUnbalancedParens(srcNode.Expression);
+            bool needsParens = HasUnbalancedParens(srcNode.Expression) || HasNonWordCharactersOutsideParens(srcNode.Expression);
             var expression = srcNode.Expression.Trim(new char[] { ' ', '\t' });
             if (needsParens)
                 expression = "(" + expression + ")";
@@ -86,6 +84,34 @@
                 isFirst = false;
             }
 
+            return false;
+        }
+
+        static Regex nonWordRegex = new Regex(@"[^\w\d\.\(\)\]\[""]", RegexOptions.Singleline | RegexOptions.Multiline | RegexOptions.Compiled);
+        private bool HasNonWordCharactersOutsideParens(string expression)
+        {
+            expression = expression.Trim();
+            foreach (Match match in nonWordRegex.Matches(expression))
+            {
+                int idx = match.Index;
+                if (idx == 0 || idx == expression.Length - 1) 
+                    return true;
+
+                int parenLevelBefore = new Regex(@"\(").Matches(expression.Substring(0, idx + 1)).Count
+                    - new Regex(@"\)").Matches(expression.Substring(0, idx + 1)).Count;
+
+                int parenLevelAfter = new Regex(@"\)").Matches(expression.Substring(idx + 1)).Count
+                    - new Regex(@"\(").Matches(expression.Substring(idx + 1)).Count;
+
+                int quotesBefore = new Regex("\"").Matches(expression.Substring(0, idx + 1)).Count
+                    + new Regex("\"").Matches(expression.Substring(0, idx + 1)).Count;
+
+                int quotesAfter = new Regex("\"").Matches(expression.Substring(idx + 1)).Count
+                    + new Regex("\"").Matches(expression.Substring(idx + 1)).Count;
+
+                if ((parenLevelBefore <= 0 || parenLevelAfter <= 0) && !(quotesBefore % 2 == 1 && quotesAfter % 2 == 1))
+                    return true;
+            }
             return false;
         }
     }

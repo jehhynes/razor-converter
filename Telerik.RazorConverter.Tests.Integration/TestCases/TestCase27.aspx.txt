@@ -1,5 +1,9 @@
 ﻿<%@ Page Title="Select a Document" MasterPageFile="~/Views/Admin/AffiliateSettings/CustomContent/Popup.Master" Language="C#" Inherits="Drg.M3.Client.M3ViewPage" %>
 
+<%:Url.Content("~/Document?popup=true")%>
+
+<%:"asdf" + "asdf2"%>
+
 <%:(int)Model.ReferenceType%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
